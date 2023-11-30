@@ -77,17 +77,27 @@ export default function App() {
     return colors.darkgrey;
   };
 
-  const greenCaps = rows.flatMap((row, i) =>
-    row.filter(
-      (cell, j) => getCellBackgroundColor(cell, i, j) === colors.primary
-    )
-  );
+  // const greenCaps = rows.flatMap((row, i) =>
+  //   row.filter(
+  //     (cell, j) => getCellBackgroundColor(cell, i, j) === colors.primary
+  //   )
+  // );
 
-  const yellowCaps = rows.flatMap((row, i) =>
-    row.filter(
-      (cell, j) => getCellBackgroundColor(cell, i, j) === colors.secondary
-    )
-  );
+  // const yellowCaps = rows.flatMap((row, i) =>
+  //   row.filter(
+  //     (cell, j) => getCellBackgroundColor(cell, i, j) === colors.secondary
+  //   )
+  // );
+
+  const getKeyCapColors = (color) => {
+    return rows.flatMap((row, i) =>
+      row.filter((cell, j) => getCellBackgroundColor(cell, i, j) === color)
+    );
+  };
+
+  const greenCaps = getKeyCapColors(colors.primary);
+  const yellowCaps = getKeyCapColors(colors.secondary);
+  const greyCaps = getKeyCapColors(colors.darkgrey);
 
   return (
     <SafeAreaView style={styles.container}>
@@ -119,6 +129,7 @@ export default function App() {
         onKeyPressed={onKeyPressed}
         greenCaps={greenCaps}
         yellowCaps={yellowCaps}
+        greyCaps={greyCaps}
       />
     </SafeAreaView>
   );
