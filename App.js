@@ -1,8 +1,6 @@
 import { useState } from "react";
 import { StatusBar } from "expo-status-bar";
 import { StyleSheet, Text, View, SafeAreaView, ScrollView } from "react-native";
-//SafeAreaView -- sets view where user can actually see (skips over the notch forexample on top of iphone)
-//ScrollView -- added for if num of attempts goes beyond screen length
 import { colors, CLEAR, ENTER } from "./src/constants";
 import Keyboard from "./src/components/Keyboard";
 
@@ -76,18 +74,6 @@ export default function App() {
     //DARK GREY - letter not in word
     return colors.darkgrey;
   };
-
-  // const greenCaps = rows.flatMap((row, i) =>
-  //   row.filter(
-  //     (cell, j) => getCellBackgroundColor(cell, i, j) === colors.primary
-  //   )
-  // );
-
-  // const yellowCaps = rows.flatMap((row, i) =>
-  //   row.filter(
-  //     (cell, j) => getCellBackgroundColor(cell, i, j) === colors.secondary
-  //   )
-  // );
 
   const getKeyCapColors = (color) => {
     return rows.flatMap((row, i) =>
