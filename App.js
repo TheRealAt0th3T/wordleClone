@@ -1,6 +1,13 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { StatusBar } from "expo-status-bar";
-import { StyleSheet, Text, View, SafeAreaView, ScrollView } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  View,
+  SafeAreaView,
+  ScrollView,
+  Alert,
+} from "react-native";
 import { colors, CLEAR, ENTER } from "./src/constants";
 import Keyboard from "./src/components/Keyboard";
 
@@ -21,9 +28,38 @@ export default function App() {
 
   const [currRow, setCurrRow] = useState(0);
   const [currCol, setCurrCol] = useState(0);
+  const [gameState, setGameState] = useState("playing");
+
+  //CHECKING WIN AND LOSS STATUS
+  //check when currRow changes
+  useEffect(() => {
+    if (currRow > 0) {
+      checkGameState();
+    }
+  }, [currRow]);
+
+  const checkGameState = () => {
+    if (isWon()) {
+      Alert.alert("won");
+      setGameState("won");
+    } else if (isLost()) {
+      Alert.alert("lost");
+      setGameState("lost");
+    }
+  };
+
+  const isWon = () => {
+    const rowToCheck = rows[currRow - 1];
+    return rowToCheck.every((cell, i) => cell === characters[i]);
+  };
+
+  const isLost = () => {
+    return currRow === NUM_OF_ATTEMPTS;
+  };
 
   onKeyPressed = (key) => {
-    console.log(key);
+    if (gameState !== "playing") return;
+
     const updatedRows = copyArray(rows); //returns each individual col/cell from that row
 
     if (key === CLEAR) {
