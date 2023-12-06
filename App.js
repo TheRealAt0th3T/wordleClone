@@ -8,8 +8,9 @@ import {
   ScrollView,
   Alert,
 } from "react-native";
-import { colors, CLEAR, ENTER } from "./src/constants";
+import { colors, CLEAR, ENTER, colorsToEmoji } from "./src/constants";
 import Keyboard from "./src/components/Keyboard";
+import * as Clipboard from "expo-clipboard";
 
 const NUM_OF_ATTEMPTS = 6;
 const WORD_LENGTH = 5;
@@ -18,8 +19,10 @@ const copyArray = (arr) => {
   return [...arr.map((rows) => [...rows])];
 };
 
+const words = ["hello", "world"];
+
 export default function App() {
-  const word = "hello";
+  const word = words[1];
   const characters = word.split("");
 
   const [rows, setRows] = useState(
@@ -39,11 +42,15 @@ export default function App() {
   }, [currRow]);
 
   const checkGameState = () => {
-    if (isWon()) {
-      Alert.alert("won");
+    if (isWon() && gameState !== "won") {
+      Alert.alert(
+        "You have won!",
+        "You guessed the word in " + currRow + " attempts.",
+        [{ text: "Share", onPress: shareScore }]
+      );
       setGameState("won");
-    } else if (isLost()) {
-      Alert.alert("lost");
+    } else if (isLost() && gameState !== "lost") {
+      Alert.alert("Oof, try again tomorrow.");
       setGameState("lost");
     }
   };
@@ -57,7 +64,22 @@ export default function App() {
     return currRow === NUM_OF_ATTEMPTS;
   };
 
+  const shareScore = () => {
+    const colorMap = rows
+      .map((row, i) =>
+        row
+          .map((cell, j) => colorsToEmoji[getCellBackgroundColor(cell, i, j)])
+          .join("")
+      )
+      .filter((row) => row)
+      .join("\n"); //keeps only the rows that have values
+    const textToShare = "Wordle \n" + colorMap;
+    Clipboard.setStringAsync(textToShare);
+    Alert.alert("Copied to clipboard");
+  };
+
   onKeyPressed = (key) => {
+    console.log(key);
     if (gameState !== "playing") return;
 
     const updatedRows = copyArray(rows); //returns each individual col/cell from that row
