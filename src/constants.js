@@ -1,3 +1,5 @@
+export const NUM_OF_ATTEMPTS = 6;
+
 export const colors = {
   black: "#121214",
   darkgrey: "#3A3A3D",
